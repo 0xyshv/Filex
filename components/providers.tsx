@@ -15,7 +15,7 @@ const config = createConfig(
     walletConnectProjectId:
       process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || "",
     chains: [sepolia],
-    appName: "BlockInvoice",
+    appName: "FileX",
   })
 );
 

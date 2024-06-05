@@ -39,7 +39,7 @@ const Navbar: React.FC<NavbarProps> = ({ setActiveComponent }) => {
             </NavigationMenuItem>
             <NavigationMenuItem>
               <NavigationMenuTrigger onClick={() => setActiveComponent("shareFiles")}>
-                Share Files
+                Shared Files
               </NavigationMenuTrigger>
             </NavigationMenuItem>
           </NavigationMenuList>

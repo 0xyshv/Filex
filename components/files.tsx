@@ -51,7 +51,9 @@ const Files = () => {
                     File Name
                   </CardContent>
                   <CardFooter className="flex justify-between">
-                    File Name
+                    <Button>View</Button>
+                    <Button>Share</Button>
+                    <Button>Download</Button>
                   </CardFooter>
                 </Card>
               ))}

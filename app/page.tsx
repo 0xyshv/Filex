@@ -1,12 +1,17 @@
 import Navbar from "@/components/navbar";
-import Image from "next/image";
+import Upload from "@/components/upload";
+
 
 export default function Home() {
   return (
     <>
       <Navbar />
-      <main className="flex min-h-screen flex-col items-center justify-between p-24">
-        Hellos
+      <main className="px-24 py-8">
+        <div className="flex justify-between">
+          <div></div>
+          <Upload />
+        </div>
+
       </main>
     </>
   );

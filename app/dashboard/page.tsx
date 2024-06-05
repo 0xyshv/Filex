@@ -1,6 +1,5 @@
 "use client"
 
-
 import Navbar from "@/components/navbar";
 import Upload from "@/components/upload";
 import { useRouter } from "next/navigation";

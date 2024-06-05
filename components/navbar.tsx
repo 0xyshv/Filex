@@ -14,8 +14,12 @@ import {
 } from "@/components/ui/navigation-menu";
 import { ConnectKitButton } from "connectkit";
 
+interface NavbarProps {
+  setActiveComponent: (component: string) => void;
+}
 
-const Navbar = () => {
+
+const Navbar: React.FC<NavbarProps> = ({ setActiveComponent }) => {
   const pathname = usePathname()
   return (
     <div className="flex justify-between p-4">
@@ -29,12 +33,12 @@ const Navbar = () => {
         <NavigationMenu>
           <NavigationMenuList>
             <NavigationMenuItem >
-              <NavigationMenuTrigger>
+              <NavigationMenuTrigger onClick={() => setActiveComponent("files")}>
                 My Files
               </NavigationMenuTrigger>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <NavigationMenuTrigger>
+              <NavigationMenuTrigger onClick={() => setActiveComponent("shareFiles")}>
                 Share Files
               </NavigationMenuTrigger>
             </NavigationMenuItem>

@@ -1,18 +1,32 @@
 "use client"
 
-import Download from "@/components/download";
+
 import Navbar from "@/components/navbar";
-import Share from "@/components/share";
 import Upload from "@/components/upload";
-import View from "@/components/view";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
+import dynamic from "next/dynamic";
+
+// Dynamically import components
+const Files = dynamic(() => import('@/components/files'));
+const ShareFiles = dynamic(() => import('@/components/shareFile'));
 
 
-export default function Dashboard() {
+const Dashboard: React.FC = () => {
+  const [activeComponent, setActiveComponent] = useState<string>("files");
   const { isConnected } = useAccount();
   const router = useRouter();
+
+  let Component: React.ComponentType;
+  if (activeComponent === "files") {
+    Component = Files;
+  } else if (activeComponent === "shareFiles") {
+    Component = ShareFiles;
+  } else {
+    // eslint-disable-next-line react/display-name
+    Component = () => <div>Select an option from the navbar.</div>;
+  }
 
   useEffect(() => {
     if (isConnected) {
@@ -26,16 +40,14 @@ export default function Dashboard() {
     <>
       {isConnected && (
         <>
-          <Navbar />
+          <Navbar setActiveComponent={setActiveComponent} />
           <main className="px-24 py-8">
             <div className="flex justify-between">
               <div></div>
               <Upload />
             </div>
             <div className="flex flex-col gap-12 py-24" >
-              <View />
-              <Download />
-              <Share />
+              <Component />
             </div>
           </main>
         </>
@@ -44,3 +56,5 @@ export default function Dashboard() {
     </>
   );
 }
+
+export default Dashboard;

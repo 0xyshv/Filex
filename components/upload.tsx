@@ -1,4 +1,6 @@
-import React from 'react'
+"use client"
+
+import React, { ChangeEvent, useState } from 'react'
 import {
   Dialog,
   DialogContent,
@@ -11,6 +13,15 @@ import { Button } from "@/components/ui/button";
 import { PlusCircledIcon } from "@radix-ui/react-icons";
 
 const Upload = () => {
+
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
+  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files.length > 0) {
+      setSelectedFile(event.target.files[0]);
+    }
+  };
+
   return (
     <div className=''>
       <Dialog>
@@ -23,11 +34,18 @@ const Upload = () => {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Select a file to Upload</DialogTitle>
-            <DialogDescription>
-              This action cannot be undone. This will permanently delete your account
-              and remove your data from our servers.
-            </DialogDescription>
           </DialogHeader>
+          <input
+            type="file"
+            onChange={handleFileChange}
+            accept="image/*"
+          />
+          {selectedFile && (
+            <div>
+              <p>Selected File: {selectedFile.name}</p>
+            </div>
+          )}
+
         </DialogContent>
       </Dialog>
     </div>

@@ -1,5 +1,8 @@
+import Download from "@/components/download";
 import Navbar from "@/components/navbar";
+import Share from "@/components/share";
 import Upload from "@/components/upload";
+import View from "@/components/view";
 
 
 export default function Home() {
@@ -11,7 +14,11 @@ export default function Home() {
           <div></div>
           <Upload />
         </div>
-
+        <div className="flex flex-col gap-12 py-24" >
+          <View />
+          <Download />
+          <Share />
+        </div>
       </main>
     </>
   );

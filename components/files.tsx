@@ -10,6 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import Upload from "./upload";
 
 const Files = () => {
 
@@ -25,6 +26,10 @@ const Files = () => {
 
   return (
     <div className="p-8 grid gap-8 ">
+      <div className="flex justify-between">
+        <div></div>
+        <Upload />
+      </div>
       {loading ? (
         <div className="flex justify-center mt-44">
           <div className="flex justify-center items-center">

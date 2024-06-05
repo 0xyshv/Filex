@@ -1,7 +1,6 @@
 "use client"
 
 import Navbar from "@/components/navbar";
-import Upload from "@/components/upload";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
@@ -41,13 +40,7 @@ const Dashboard: React.FC = () => {
         <>
           <Navbar setActiveComponent={setActiveComponent} />
           <main className="px-24 py-8">
-            <div className="flex justify-between">
-              <div></div>
-              <Upload />
-            </div>
-            <div className="flex flex-col gap-12 py-24" >
-              <Component />
-            </div>
+            <Component />
           </main>
         </>
       )}

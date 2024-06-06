@@ -11,7 +11,7 @@ A file sharing DApp built using apillon.
 ## Links
 
 [Deployed App](filex-lake.vercel.app)
-[Presentation](https://docs.google.com/presentation/d/11T-IDs4DrIm7jLphuof3eOaS1a9ihccQStqPbT8NfhU/edit?usp=sharing)
+[Presentation](https://www.canva.com/design/DAGHSNi2Ims/n7GHkHk6Yyj_3SYauLPOcA/view?utm_content=DAGHSNi2Ims&utm_campaign=designshare&utm_medium=link&utm_source=editor)
 
 ## Tech Stack
 

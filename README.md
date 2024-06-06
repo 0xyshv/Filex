@@ -10,7 +10,7 @@ A file sharing DApp built using apillon.
 
 ## Links
 
-[Deployed App]()
+[Deployed App](filex-lake.vercel.app)
 [Presentation]()
 
 ## Tech Stack
@@ -24,10 +24,9 @@ A file sharing DApp built using apillon.
 
 ## App Demo Screenshots
 
-![image](/public/app/1.jpg)
-![image](/public/app/2.jpg)
-![image](/public/app/3.jpg)
-![image](/public/app/4.jpg)
+![image](/public/app/1.png)
+![image](/public/app/2.png)
+![image](/public/app/3.png)
 
 ## Instructions to setup locally
 

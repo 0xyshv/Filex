@@ -11,6 +11,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import Upload from "./upload";
+import { Dialog, DialogHeader, DialogTrigger } from "./ui/dialog";
+import { DialogContent, DialogTitle } from "@radix-ui/react-dialog";
 
 const Files = () => {
 
@@ -56,7 +58,19 @@ const Files = () => {
                     File Name
                   </CardContent>
                   <CardFooter className="flex justify-between">
-                    <Button>Share</Button>
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <Button>Share</Button>
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle>
+                            {/* display the name of file here */}
+                          </DialogTitle>
+                        </DialogHeader>
+                        {/* take wallet address as input here */}
+                      </DialogContent>
+                    </Dialog>
                     <Button>Download</Button>
                   </CardFooter>
                 </Card>

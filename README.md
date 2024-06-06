@@ -1,6 +1,6 @@
 ## FileX
 
-A file sharing DApp built using apillion.
+A file sharing DApp built using apillon.
 
 ## Features
 

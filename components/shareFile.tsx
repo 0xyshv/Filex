@@ -1,4 +1,6 @@
-import React from 'react'
+"use client"
+
+import React, { useEffect, useState } from 'react'
 import {
   Table,
   TableBody,
@@ -9,77 +11,80 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-
-const files = [
-  {
-    fileId: "INV001",
-    sharedBy: "Paid",
-    sharedOn: "$250.00",
-    fileName: "Credit Card",
-  },
-  {
-    fileId: "INV002",
-    sharedBy: "Pending",
-    sharedOn: "$150.00",
-    fileName: "PayPal",
-  },
-  {
-    fileId: "INV003",
-    sharedBy: "Unpaid",
-    sharedOn: "$350.00",
-    fileName: "Bank Transfer",
-  },
-  {
-    fileId: "INV004",
-    sharedBy: "Paid",
-    sharedOn: "$450.00",
-    fileName: "Credit Card",
-  },
-  {
-    fileId: "INV005",
-    sharedBy: "Paid",
-    sharedOn: "$550.00",
-    fileName: "PayPal",
-  },
-  {
-    fileId: "INV006",
-    sharedBy: "Pending",
-    sharedOn: "$200.00",
-    fileName: "Bank Transfer",
-  },
-  {
-    fileId: "INV007",
-    sharedBy: "Unpaid",
-    sharedOn: "$300.00",
-    fileName: "Credit Card",
-  },
-]
-
+import { useAccount } from 'wagmi';
+import { Button } from './ui/button';
 
 const ShareFile = () => {
+  const { address } = useAccount();
+  const [loading, setLoading] = useState(false);
+  const [files, setFiles] = useState<any[]>([]);
+
+  useEffect(() => {
+    setLoading(true);
+    readSharedFiles();
+  }, []);
+
+  const readSharedFiles = async () => {
+    const formData = new FormData();
+    formData.append("walletAddress", address as string);
+
+    try {
+      const response = await fetch("/api/apillon/read/shared-files", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to read shared file");
+      }
+
+      const data = await response.json();
+
+      const tableRows = data.data.items.map((file: any) => ({
+        fileId: file.uuid,
+        fileName: file.name,
+        sharedOn: new Date(file.createTime).toDateString(),
+        link: file.link,
+      }));
+
+      setFiles(tableRows);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error reading file:", error);
+      setLoading(false);
+    }
+  };
+
   return (
     <>
-      <Table>
-        <TableCaption>A list of your shared files.</TableCaption>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-[100px]">fileId</TableHead>
-            <TableHead>File Name</TableHead>
-            <TableHead>SharedOn</TableHead>
-            <TableHead className="">Shared By</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {files.map((fileId) => (
-            <TableRow key={fileId.fileId}>
-              <TableCell className="font-medium">{fileId.fileId}</TableCell>
-              <TableCell>{fileId.fileName}</TableCell>
-              <TableCell className="">{fileId.sharedOn}</TableCell>
-              <TableCell>{fileId.sharedBy}</TableCell>
+      {loading ? (
+        <div className="flex justify-center w-full mt-16">
+          Loading Data ...
+        </div>
+      ) : (
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="">File Id</TableHead>
+              <TableHead>File Name</TableHead>
+              <TableHead>SharedOn</TableHead>
+              <TableHead className="">View</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {files.map((file) => (
+              <TableRow key={file.fileId}>
+                <TableCell className="font-medium">{file.fileId}</TableCell>
+                <TableCell>{file.fileName}</TableCell>
+                <TableCell className="">{file.sharedOn}</TableCell>
+                <TableCell>
+                  <Button onClick={() => window.open(file.link, "_blank")}>View</Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      )}
     </>
 
   )

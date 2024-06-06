@@ -83,7 +83,7 @@ const uploadFile = async (file: File, walletAddress: string) => {
   formData.append("walletAddress", walletAddress);
 
   try {
-    const response = await fetch("/api/apillion/upload", {
+    const response = await fetch("/api/apillon/upload", {
       method: "POST",
       body: formData,
     });
@@ -94,6 +94,12 @@ const uploadFile = async (file: File, walletAddress: string) => {
 
     const data = await response.json();
     console.log("File uploaded successfully:", data);
+    // fidn directoryUuid in localStorage
+    const directoryUuid = localStorage.getItem(walletAddress);
+    console.log("directoryUuid", directoryUuid);
+    if (directoryUuid !== data.file.directoryUuid) {
+      localStorage.setItem(walletAddress, data.file.directoryUuid);
+    }
   } catch (error) {
     console.error("Error uploading file:", error);
   }

@@ -1,7 +1,5 @@
 //@ts-nocheck
 import { NextRequest, NextResponse } from "next/server";
-import path from "path";
-import fs from "fs";
 import { Storage, LogLevel, FileStatus } from "@apillon/sdk";
 
 export const runtime = "nodejs";
@@ -35,7 +33,7 @@ export async function POST(req: NextRequest, res: Response) {
   // create and instance of a bucket directly through uuid
   const bucket = storage.bucket("734f3b74-91ff-40b3-801c-d0bfabb43628");
 
-  await bucket.uploadFiles(
+  const uploadResult = await bucket.uploadFiles(
     [
       {
         fileName: fileName,
@@ -46,6 +44,8 @@ export async function POST(req: NextRequest, res: Response) {
     // Upload the files in a new subdirectory in the bucket instead of in the root of the bucket
     { wrapWithDirectory: true, directoryPath: `user_data/${wallet}` }
   );
+
+  const uploadedFile = await bucket.file(uploadResult[0].fileUuid).get();
 
   return NextResponse.json({
     message: "File uploaded successfully",

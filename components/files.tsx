@@ -11,19 +11,87 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import Upload from "./upload";
-import { Dialog, DialogHeader, DialogTrigger } from "./ui/dialog";
-import { DialogContent, DialogTitle } from "@radix-ui/react-dialog";
+import { Dialog, DialogHeader, DialogTrigger, DialogContent, DialogTitle } from "./ui/dialog";
+import { Input } from "./ui/input";
+import { Label } from "./ui/label";
+import { useAccount } from "wagmi";
+import { isAddress } from "viem";
 
-const Files = () => {
-
-  const [fileData, setfileData] = useState([]);
+const Files = ({ walletAddress }: any) => {
+  const { address } = useAccount()
+  const [fileData, setFileData] = useState<any>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [sharing, setSharing] = useState(false);
+  const [wallet, setWallet] = useState("");
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [file, setFile] = useState({ file_name: "", file_uuid: "" });
 
 
   useEffect(() => {
-    console.log("Getting files...");
-    setLoading(false); //true
+    setLoading(true);
+    readFiles();
   }, []);
+
+  async function handleShare() {
+    // validate eth
+    if (isAddress(wallet)) {
+      setSharing(true);
+
+      const formData = new FormData();
+      formData.append("sharedBy", address as string);
+      formData.append("sharedWith", wallet);
+      formData.append("fileUuid", file.file_uuid);
+
+      try {
+        const response = await fetch("/api/apillon/share", {
+          method: "POST",
+          body: formData,
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to share file");
+        }
+
+        const data = await response.json();
+        console.log("File share successful:", data);
+
+        setSharing(false);
+        setWallet("");
+        setIsSuccess(true);
+      } catch (error) {
+        console.error("Error sharing file:", error);
+        setSharing(false);
+      }
+    }
+  }
+
+  const readFiles = async () => {
+    const formData = new FormData();
+    const directoryUuid = localStorage.getItem(walletAddress);
+    formData.append("directoryUuid", directoryUuid as string);
+    formData.append("walletAddress", address as string);
+
+    try {
+      const response = await fetch("/api/apillon/read", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to read file");
+      }
+
+      const data = await response.json();
+      console.log("File read successfully:", data);
+
+      setFileData(data.data.items);
+      setLoading(false);
+
+    } catch (error) {
+      console.error("Error reading file:", error);
+    }
+  };
+
 
 
   return (
@@ -44,34 +112,88 @@ const Files = () => {
         <>
           {fileData.length > 0 ? (
             <>
-              {fileData.map((item, index) => (
+              {fileData.map((item: any, index: number) => (
                 <Card
                   key={index}
                   className="p-4 shadow-md "
                 >
                   <CardHeader>
                     <CardTitle className="flex justify-between">
-                      File Name
+                      {item.name}
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="">
-                    File Name
+                    <Badge>{item.uuid}</Badge>
                   </CardContent>
                   <CardFooter className="flex justify-between">
+
                     <Dialog>
                       <DialogTrigger asChild>
-                        <Button>Share</Button>
+                        <Button onClick={() => {
+                          setFile({ file_name: item.name, file_uuid: item.uuid });
+                          setIsSuccess(false);
+                        }}>
+                          Share
+                        </Button>
                       </DialogTrigger>
-                      <DialogContent>
-                        <DialogHeader>
-                          <DialogTitle>
-                            {/* display the name of file here */}
-                          </DialogTitle>
-                        </DialogHeader>
-                        {/* take wallet address as input here */}
-                      </DialogContent>
+                      {!isSuccess ? (
+                        <DialogContent>
+                          <DialogHeader>
+                            <DialogTitle>
+                              Share your file
+                            </DialogTitle>
+                          </DialogHeader>
+                          {loading ? (
+                            <div className="flex flex-col items-center gap-4 justify-center">
+
+                              <p>Please wait...</p>
+                            </div>
+                          ) : (
+                            <>
+                              {sharing ? (
+                                <div className="flex flex-col items-center gap-4 justify-center w-full my-6">
+                                  {/* <Spinner size="lg" /> */}
+                                  <p>Sharing...</p>
+                                </div>
+                              ) : (
+                                <>
+                                  <p>
+                                    File : {file.file_name + `(${file.file_uuid})`}
+                                  </p>
+                                  <div className="flex w-full flex-wrap md:flex-nowrap gap-4">
+                                    <Label>Wallet Address</Label>
+                                    <Input
+                                      type="text"
+                                      value={wallet}
+                                      onChange={(e) => setWallet(e.target.value)}
+                                      placeholder="Enter receiver's wallet address"
+                                      required
+                                    />
+                                  </div>
+                                  <Button
+                                    color="secondary"
+                                    onClick={handleShare}
+                                    disabled={!isAddress(wallet)}
+                                  >
+                                    Share
+                                  </Button>
+                                </>
+                              )}
+                            </>
+                          )}
+
+                        </DialogContent>
+                      ) : (
+                        <div className="flex flex-col items-center justify-center gap-4 w-full p-4">
+                          <div>
+                            Success
+                          </div>
+                          <p>Sharing Successful.</p>
+                        </div>
+                      )}
                     </Dialog>
-                    <Button>Download</Button>
+
+                    <Button onClick={() => window.open(item.link, "_blank")}>Download</Button>
                   </CardFooter>
                 </Card>
               ))}

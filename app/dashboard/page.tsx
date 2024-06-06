@@ -10,13 +10,16 @@ import dynamic from "next/dynamic";
 const Files = dynamic(() => import('@/components/files'));
 const ShareFiles = dynamic(() => import('@/components/shareFile'));
 
+interface ComponentProps {
+  walletAddress?: string;
+}
 
 const Dashboard: React.FC = () => {
   const [activeComponent, setActiveComponent] = useState<string>("files");
-  const { isConnected } = useAccount();
+  const { isConnected, address } = useAccount();
   const router = useRouter();
 
-  let Component: React.ComponentType;
+  let Component: React.ComponentType<ComponentProps>;
   if (activeComponent === "files") {
     Component = Files;
   } else if (activeComponent === "shareFiles") {
@@ -32,7 +35,7 @@ const Dashboard: React.FC = () => {
     } else {
       router.push("/");
     }
-  }, [isConnected]);
+  }, [isConnected, router]);
 
   return (
     <>
@@ -40,7 +43,7 @@ const Dashboard: React.FC = () => {
         <>
           <Navbar setActiveComponent={setActiveComponent} />
           <main className="px-24 py-8">
-            <Component />
+            <Component walletAddress={address} />
           </main>
         </>
       )}

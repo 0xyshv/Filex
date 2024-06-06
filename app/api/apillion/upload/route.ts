@@ -47,10 +47,6 @@ export async function POST(req: NextRequest, res: Response) {
     { wrapWithDirectory: true, directoryPath: `user_data/${wallet}` }
   );
 
-  // testing
-  // const filePath = path.join(process.cwd(), "uploads", file.name);
-  // fs.writeFileSync(filePath, Buffer.from(content));
-
   return NextResponse.json({
     message: "File uploaded successfully",
     status: "ok",
@@ -59,5 +55,4 @@ export async function POST(req: NextRequest, res: Response) {
       objects: objects,
     },
   });
-  // });
 }

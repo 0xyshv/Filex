@@ -132,7 +132,6 @@ const Files = ({ walletAddress }: any) => {
 
                     </CardContent>
                     <CardFooter className="flex justify-end gap-2">
-                      <Badge> {item.createTime}</Badge>
                       <Dialog>
                         <DialogTrigger asChild>
                           <Button onClick={() => {
@@ -142,61 +141,64 @@ const Files = ({ walletAddress }: any) => {
                             Share
                           </Button>
                         </DialogTrigger>
-                        {!isSuccess ? (
-                          <DialogContent>
-                            <DialogHeader>
-                              <DialogTitle>
-                                Share your file
-                              </DialogTitle>
-                            </DialogHeader>
-                            {loading ? (
-                              <div className="flex flex-col items-center gap-4 justify-center">
 
-                                <p>Please wait...</p>
-                              </div>
-                            ) : (
-                              <>
-                                {sharing ? (
-                                  <div className="flex flex-col items-center gap-4 justify-center w-full my-6">
-                                    {/* <Spinner size="lg" /> */}
-                                    <p>Sharing...</p>
-                                  </div>
-                                ) : (
-                                  <>
-                                    <p>
-                                      File : {file.file_name + `(${file.file_uuid})`}
-                                    </p>
-                                    <div className="flex w-full flex-wrap md:flex-nowrap gap-4">
-                                      <Label>Wallet Address</Label>
-                                      <Input
-                                        type="text"
-                                        value={wallet}
-                                        onChange={(e) => setWallet(e.target.value)}
-                                        placeholder="Enter receiver's wallet address"
-                                        required
-                                      />
+                        <DialogContent>
+                          {!isSuccess ? (
+                            <>
+                              <DialogHeader>
+                                <DialogTitle>
+                                  Share your file
+                                </DialogTitle>
+                              </DialogHeader>
+                              {loading ? (
+                                <div className="flex flex-col items-center gap-4 justify-center">
+
+                                  <p>Please wait...</p>
+                                </div>
+                              ) : (
+                                <>
+                                  {sharing ? (
+                                    <div className="flex flex-col items-center gap-4 justify-center w-full my-6">
+                                      {/* <Spinner size="lg" /> */}
+                                      <p>Sharing...</p>
                                     </div>
-                                    <Button
-                                      color="secondary"
-                                      onClick={handleShare}
-                                      disabled={!isAddress(wallet)}
-                                    >
-                                      Share
-                                    </Button>
-                                  </>
-                                )}
-                              </>
-                            )}
-
-                          </DialogContent>
-                        ) : (
-                          <div className="flex flex-col items-center justify-center gap-4 w-full p-4">
-                            <div>
-                              Success
+                                  ) : (
+                                    <>
+                                      <p>
+                                        File : {file.file_name + `(${file.file_uuid})`}
+                                      </p>
+                                      <div className="flex w-full flex-wrap md:flex-nowrap gap-4">
+                                        <Label>Wallet Address</Label>
+                                        <Input
+                                          type="text"
+                                          value={wallet}
+                                          onChange={(e) => setWallet(e.target.value)}
+                                          placeholder="Enter receiver's wallet address"
+                                          required
+                                        />
+                                      </div>
+                                      <Button
+                                        color="secondary"
+                                        onClick={handleShare}
+                                        disabled={!isAddress(wallet)}
+                                      >
+                                        Share
+                                      </Button>
+                                    </>
+                                  )}
+                                </>
+                              )}
+                            </>
+                          ) : (
+                            <div className="flex flex-col items-center justify-center gap-4 w-full p-4">
+                              <div>
+                                Success
+                              </div>
+                              <p>Sharing Successful.</p>
                             </div>
-                            <p>Sharing Successful.</p>
-                          </div>
-                        )}
+                          )}
+                        </DialogContent>
+
                       </Dialog>
 
                       <Button onClick={() => window.open(item.link, "_blank")}>Download</Button>

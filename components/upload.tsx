@@ -12,25 +12,14 @@ import {
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button";
 import { PlusCircledIcon } from "@radix-ui/react-icons";
+import { useAccount } from "wagmi";
+import DragAndDrop from './dragAndDrop';
+
 
 const Upload = () => {
 
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
-
-
-  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files.length > 0) {
-      const file = event.target.files[0];
-      setSelectedFile(file);
-      const reader = new FileReader();
-      reader.onload = () => {
-        setImagePreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
+  const [uploading, setUploading] = useState(false);
+  const { address } = useAccount();
 
   return (
     <div className=''>
@@ -45,19 +34,21 @@ const Upload = () => {
           <DialogHeader>
             <DialogTitle>Select a file to Upload</DialogTitle>
           </DialogHeader>
-          <input
-            type="file"
-            onChange={handleFileChange}
-            accept="image/*"
-          />
-          <div className='pl-20'>
-            {imagePreview && (
-              <img src={imagePreview} alt="Selected File" style={{ maxWidth: '100%', maxHeight: '200px' }} />
-            )}
-          </div>
-          <DialogFooter>
-            <Button>Upload</Button>
-          </DialogFooter>
+          {uploading ? (
+            <div className="flex flex-col items-center gap-4 justify-center">
+              <p>Uploading file...</p>
+            </div>
+          ) : (
+            <>
+              <>
+                <p>Please select your file to upload.</p>
+                <DragAndDrop
+                  walletAddress={address as string}
+                  setUploading={setUploading}
+                />
+              </>
+            </>
+          )}
         </DialogContent>
       </Dialog>
     </div>
@@ -65,3 +56,4 @@ const Upload = () => {
 }
 
 export default Upload
+

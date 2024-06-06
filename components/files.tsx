@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import {
   Card,
   CardContent,
+  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -16,6 +17,9 @@ import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { useAccount } from "wagmi";
 import { isAddress } from "viem";
+
+
+
 
 const Files = ({ walletAddress }: any) => {
   const { address } = useAccount()
@@ -95,117 +99,125 @@ const Files = ({ walletAddress }: any) => {
 
 
   return (
-    <div className="p-8 grid gap-8 ">
-      <div className="flex justify-between">
-        <div></div>
+    <>
+      <div className="flex justify-between px-8">
+        <div className="text-2xl font-semibold">My Files</div>
         <Upload />
       </div>
-      {loading ? (
-        <div className="flex justify-center mt-44">
-          <div className="flex justify-center items-center">
-            <div className="flex justify-center items-center p-4">
-              Loading Files....
+      <div className="p-8 grid grid-cols-3 gap-8 ">
+        {loading ? (
+          <div className="flex justify-center mt-44">
+            <div className="flex justify-center items-center">
+              <div className="flex justify-center items-center pl-48">
+                Loading Files....
+              </div>
             </div>
           </div>
-        </div>
-      ) : (
-        <>
-          {fileData.length > 0 ? (
-            <>
-              {fileData.map((item: any, index: number) => (
-                <Card
-                  key={index}
-                  className="p-4 shadow-md "
-                >
-                  <CardHeader>
-                    <CardTitle className="flex justify-between">
-                      {item.name}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="">
-                    <Badge>{item.uuid}</Badge>
-                  </CardContent>
-                  <CardFooter className="flex justify-between">
+        ) : (
+          <>
+            {fileData.length > 0 ? (
+              <>
+                {fileData.map((item: any, index: number) => (
+                  <Card
+                    key={index}
+                    className="p-4 shadow-md "
+                  >
+                    <CardHeader>
+                      <CardTitle className="flex justify-between">
+                        File Name : {item.name}
+                      </CardTitle>
+                      <CardDescription>
+                        File uuid : {item.uuid}
+                      </CardDescription>
 
-                    <Dialog>
-                      <DialogTrigger asChild>
-                        <Button onClick={() => {
-                          setFile({ file_name: item.name, file_uuid: item.uuid });
-                          setIsSuccess(false);
-                        }}>
-                          Share
-                        </Button>
-                      </DialogTrigger>
-                      {!isSuccess ? (
-                        <DialogContent>
-                          <DialogHeader>
-                            <DialogTitle>
-                              Share your file
-                            </DialogTitle>
-                          </DialogHeader>
-                          {loading ? (
-                            <div className="flex flex-col items-center gap-4 justify-center">
+                    </CardHeader>
+                    <CardContent className="">
 
-                              <p>Please wait...</p>
-                            </div>
-                          ) : (
-                            <>
-                              {sharing ? (
-                                <div className="flex flex-col items-center gap-4 justify-center w-full my-6">
-                                  {/* <Spinner size="lg" /> */}
-                                  <p>Sharing...</p>
+                    </CardContent>
+                    <CardFooter className="flex justify-between">
+                      <Badge>{new Date(item.createTime).toLocaleDateString()}</Badge>
+                      <div className="flex gap-2">
+                        <Dialog>
+                          <DialogTrigger asChild>
+                            <Button onClick={() => {
+                              setFile({ file_name: item.name, file_uuid: item.uuid });
+                              setIsSuccess(false);
+                            }}>
+                              Share
+                            </Button>
+                          </DialogTrigger>
+                          {!isSuccess ? (
+                            <DialogContent>
+                              <DialogHeader>
+                                <DialogTitle>
+                                  Share your file
+                                </DialogTitle>
+                              </DialogHeader>
+                              {loading ? (
+                                <div className="flex flex-col items-center gap-4 justify-center">
+
+                                  <p>Please wait...</p>
                                 </div>
                               ) : (
                                 <>
-                                  <p>
-                                    File : {file.file_name + `(${file.file_uuid})`}
-                                  </p>
-                                  <div className="flex w-full flex-wrap md:flex-nowrap gap-4">
-                                    <Label>Wallet Address</Label>
-                                    <Input
-                                      type="text"
-                                      value={wallet}
-                                      onChange={(e) => setWallet(e.target.value)}
-                                      placeholder="Enter receiver's wallet address"
-                                      required
-                                    />
-                                  </div>
-                                  <Button
-                                    color="secondary"
-                                    onClick={handleShare}
-                                    disabled={!isAddress(wallet)}
-                                  >
-                                    Share
-                                  </Button>
+                                  {sharing ? (
+                                    <div className="flex flex-col items-center gap-4 justify-center w-full my-6">
+                                      {/* <Spinner size="lg" /> */}
+                                      <p>Sharing...</p>
+                                    </div>
+                                  ) : (
+                                    <>
+                                      <p>
+                                        File : {file.file_name + `(${file.file_uuid})`}
+                                      </p>
+                                      <div className="flex w-full flex-wrap md:flex-nowrap gap-4">
+                                        <Label>Wallet Address</Label>
+                                        <Input
+                                          type="text"
+                                          value={wallet}
+                                          onChange={(e) => setWallet(e.target.value)}
+                                          placeholder="Enter receiver's wallet address"
+                                          required
+                                        />
+                                      </div>
+                                      <Button
+                                        color="secondary"
+                                        onClick={handleShare}
+                                        disabled={!isAddress(wallet)}
+                                      >
+                                        Share
+                                      </Button>
+                                    </>
+                                  )}
                                 </>
                               )}
-                            </>
+
+                            </DialogContent>
+                          ) : (
+                            <div className="flex flex-col items-center justify-center gap-4 w-full p-4">
+                              <div>
+                                Success
+                              </div>
+                              <p>Sharing Successful.</p>
+                            </div>
                           )}
+                        </Dialog>
 
-                        </DialogContent>
-                      ) : (
-                        <div className="flex flex-col items-center justify-center gap-4 w-full p-4">
-                          <div>
-                            Success
-                          </div>
-                          <p>Sharing Successful.</p>
-                        </div>
-                      )}
-                    </Dialog>
-
-                    <Button onClick={() => window.open(item.link, "_blank")}>Download</Button>
-                  </CardFooter>
-                </Card>
-              ))}
-            </>
-          ) : (
-            <div className="flex justify-center p-40 font-bold text-xl text-gray-600">
-              No Files
-            </div>
-          )}
-        </>
-      )}
-    </div>
+                        <Button onClick={() => window.open(item.link, "_blank")}>Download</Button>
+                      </div>
+                    </CardFooter>
+                  </Card>
+                ))}
+              </>
+            ) : (
+              <div className="flex justify-center p-40 font-bold text-xl text-gray-600">
+                No Files
+              </div>
+            )}
+          </>
+        )}
+      </div>
+    </>
   );
 };
 

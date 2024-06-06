@@ -50,9 +50,7 @@ export async function POST(req: NextRequest, res: Response) {
   return NextResponse.json({
     message: "File uploaded successfully",
     status: "ok",
-    data: {
-      buckets: buckets,
-      objects: objects,
-    },
+    data: uploadResult,
+    file: uploadedFile,
   });
 }

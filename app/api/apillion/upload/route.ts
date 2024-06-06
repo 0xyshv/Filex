@@ -33,26 +33,19 @@ export async function POST(req: NextRequest, res: Response) {
   const buckets = await storage.listBuckets({ limit: 5 });
 
   // create and instance of a bucket directly through uuid
-  const bucket = storage.bucket("e8d36da5-e9e9-46ce-ba4c-f5c4eab61a35");
+  const bucket = storage.bucket("734f3b74-91ff-40b3-801c-d0bfabb43628");
 
-  // await bucket.uploadFiles(
-  //   [
-  //     {
-  //       fileName: fileName,
-  //       contentType: contentType,
-  //       content: content,
-  //     },
-  //   ],
-  //   // Upload the files in a new subdirectory in the bucket instead of in the root of the bucket
-  //   { wrapWithDirectory: true, directoryPath: `user_data/${wallet}` }
-  // );
-
-  // list objects (files, folders) in a bucket
-  const objects = await bucket.listObjects({
-    directoryUuid: "2a6961a7-ff4d-466a-b04d-99037ce1a6bb",
-    markedForDeletion: false,
-    limit: 5,
-  });
+  await bucket.uploadFiles(
+    [
+      {
+        fileName: fileName,
+        contentType: contentType,
+        content: content,
+      },
+    ],
+    // Upload the files in a new subdirectory in the bucket instead of in the root of the bucket
+    { wrapWithDirectory: true, directoryPath: `user_data/${wallet}` }
+  );
 
   // testing
   // const filePath = path.join(process.cwd(), "uploads", file.name);

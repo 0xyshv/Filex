@@ -16,6 +16,7 @@ A file sharing DApp built using apillon.
 ## Tech Stack
 
 - Apillon sdk
+- Prisma
 - Next.js 14
 - Typescript
 - Shadcn UI

@@ -27,6 +27,7 @@ A file sharing DApp built using apillon.
 ![image](/public/app/1.png)
 ![image](/public/app/2.png)
 ![image](/public/app/3.png)
+![image](/public/app/4.png)
 
 ## Instructions to setup locally
 
